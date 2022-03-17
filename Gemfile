@@ -27,6 +27,9 @@ gem 'rack-cors'
 gem 'foreman'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'rails-i18n', '~> 5.1' # For 5.0.x, 5.1.x and 5.2.x
+gem 'jwt'
+gem 'devise'
+gem 'devise_token_auth'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
