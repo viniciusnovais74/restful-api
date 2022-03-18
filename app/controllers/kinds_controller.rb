@@ -1,12 +1,12 @@
 class KindsController < ApplicationController
-  # TOKEN ='secret123'
+  TOKEN ='secret123'
   # include ActionController::HttpAuthentication::Basic::ControllerMethods
   # http_basic_authenticate_with name: "jack", password: "secret"
-  # include ActionController::HttpAuthentication::Digest::ControllerMethods
-  # USERS = { "jack" => Digest::MD5.hexdigest(["jack","Application","secret"].join(":"))}
+  include ActionController::HttpAuthentication::Digest::ControllerMethods
+  USERS = { "jack" => Digest::MD5.hexdigest(["jack","Application","secret"].join(":"))}
 
   # include ActionController::HttpAuthentication::Token::ControllerMethods
-  before_action :authenticate_user!
+  before_action :authenticate
 
   before_action :set_kind, only: [:show, :update, :destroy]
 
@@ -56,21 +56,21 @@ class KindsController < ApplicationController
       @kind = Kind.find(params[:id])
     end
 
-    # def authenticate
-    #   # authenticate_or_request_with_http_digest("Application") do |username|
-    #   #   USERS[username]
-    #   # end
-    #   authenticate_or_request_with_http_token do |token, options|
-    #     hmac_secret = 'MySe3cretK2y'
+    def authenticate
+      # authenticate_or_request_with_http_digest("Application") do |username|
+      #   USERS[username]
+      # end
+      authenticate_or_request_with_http_token do |token, options|
+        hmac_secret = 'MySe3cretK2y'
 
-    #     JWT.decode token, hmac_secret, true, {:algorithm => 'HS256'}
-    #     # Compare the tokens in a time-constant manner, to mitigate
-    #     # timing attacks.
-    #     # ActiveSupport::SecurityUtils.secure_compare(
-    #     # ::Digest::SHA256.hexdigest(token),
-    #     # ::Digest::SHA256.hexdigest(TOKEN)
-    #     # )
-    # end
+        JWT.decode token, hmac_secret, true, {:algorithm => 'HS256'}
+        # Compare the tokens in a time-constant manner, to mitigate
+        # timing attacks.
+        ActiveSupport::SecurityUtils.secure_compare(
+        ::Digest::SHA256.hexdigest(token),
+        ::Digest::SHA256.hexdigest(TOKEN)
+        )
+    end
     
     # Only allow a trusted parameter "white list" through.
     def kind_params
