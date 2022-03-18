@@ -1,3 +1,4 @@
+module V1
 class KindsController < ApplicationController
   # TOKEN ='secret123'
   # include ActionController::HttpAuthentication::Basic::ControllerMethods
@@ -77,4 +78,5 @@ class KindsController < ApplicationController
       params.require(:kind).permit(:description)
     end
   end
+end
 end
